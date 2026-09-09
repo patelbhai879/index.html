@@ -924,10 +924,11 @@
     justify-content:center;
     transition:background 0.25s ease, transform 0.25s ease;
   }
-  .special-page-close:hover{
-    background:rgba(201,24,74,0.25);
-    transform:rotate(90deg);
-    .music-toggle{
+ .special-page-close:hover{
+  background:rgba(201,24,74,0.25);
+  transform:rotate(90deg);
+}
+.music-toggle{
   position:absolute;
   top:1.4rem;
   left:1.4rem;
@@ -951,7 +952,6 @@
 .music-toggle.playing{
   animation:pulse 2s ease-in-out infinite;
 }
-  }
   .special-confetti-field{
     position:absolute;
     inset:0;
@@ -1124,7 +1124,6 @@
   <div class="special-card">
     <div class="special-confetti-field" id="special-confetti-field"></div>
     <button type="button" class="special-page-close" id="special-page-close" aria-label="Close card">✕</button>
-    <button type="button" class="special-page-close" id="special-page-close" aria-label="Close card">✕</button>
 <button type="button" class="music-toggle" id="music-toggle" aria-label="Toggle music" aria-pressed="false">🔇</button>
     <div class="cake">🎂</div>
     <span class="script-big">just for you</span>
@@ -1163,7 +1162,7 @@
       <div class="polaroid" style="--angle:308.57deg; --rot:5deg;"><div class="frame"><img src="15.jpeg" alt="Memory 13" loading="lazy" onerror="handleSlotImgError(this)"></div><span class="cap">13</span></div>
       <div class="polaroid" style="--angle:334.29deg; --rot:-2deg;"><span class="tape" style="--tape-rot:4deg;"></span><div class="frame"><img src="14.jpeg" alt="Memory 14" loading="lazy" onerror="handleSlotImgError(this)"></div><span class="cap">14</span></div>
     </div>
-
+<audio id="bday-music" src="yehfitoormera.mp3" preload="auto" loop></audio>
 
 <script>
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -1486,6 +1485,6 @@ document.addEventListener('keydown', (e) => {
   if(e.key === 'Escape' && specialPage.classList.contains('open')) closeSpecialPage();
 });
 </script>
-<audio id="bday-music" src="yehfitoormera.mp3" preload="auto" loop></audio>
+
 </body>
 </html>
