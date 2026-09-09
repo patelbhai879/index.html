@@ -927,6 +927,30 @@
   .special-page-close:hover{
     background:rgba(201,24,74,0.25);
     transform:rotate(90deg);
+    .music-toggle{
+  position:absolute;
+  top:1.4rem;
+  left:1.4rem;
+  width:38px; height:38px;
+  border-radius:50%;
+  border:1px solid var(--line);
+  background:rgba(255,255,255,0.04);
+  color:var(--cream);
+  font-size:1.05rem;
+  line-height:1;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  transition:background 0.25s ease, transform 0.25s ease;
+}
+.music-toggle:hover{
+  background:rgba(201,24,74,0.25);
+  transform:scale(1.08);
+}
+.music-toggle.playing{
+  animation:pulse 2s ease-in-out infinite;
+}
   }
   .special-confetti-field{
     position:absolute;
@@ -1100,6 +1124,8 @@
   <div class="special-card">
     <div class="special-confetti-field" id="special-confetti-field"></div>
     <button type="button" class="special-page-close" id="special-page-close" aria-label="Close card">✕</button>
+    <button type="button" class="special-page-close" id="special-page-close" aria-label="Close card">✕</button>
+<button type="button" class="music-toggle" id="music-toggle" aria-label="Toggle music" aria-pressed="false">🔇</button>
     <div class="cake">🎂</div>
     <span class="script-big">just for you</span>
     <h3>Happy Birthday, Jiya</h3>
@@ -1364,6 +1390,66 @@
   }
 }
 
+const music = document.getElementById('bday-music');
+const musicToggle = document.getElementById('music-toggle');
+let musicFadeInterval = null;
+
+function fadeAudio(audioEl, targetVolume, duration, onDone){
+  clearInterval(musicFadeInterval);
+  const startVolume = audioEl.volume;
+  const steps = 20;
+  const stepTime = duration / steps;
+  let currentStep = 0;
+
+  musicFadeInterval = setInterval(() => {
+    currentStep++;
+    const progress = currentStep / steps;
+    audioEl.volume = startVolume + (targetVolume - startVolume) * progress;
+    if(currentStep >= steps){
+      clearInterval(musicFadeInterval);
+      audioEl.volume = targetVolume;
+      if(onDone) onDone();
+    }
+  }, stepTime);
+}
+
+function playMusic(){
+  music.volume = 0;
+  music.play().then(() => {
+    fadeAudio(music, 0.55, 900);
+    musicToggle.textContent = '🔊';
+    musicToggle.classList.add('playing');
+    musicToggle.setAttribute('aria-pressed', 'true');
+  }).catch(() => {
+    musicToggle.textContent = '🔇';
+    musicToggle.classList.remove('playing');
+    musicToggle.setAttribute('aria-pressed', 'false');
+  });
+}
+
+function stopMusic(){
+  fadeAudio(music, 0, 500, () => {
+    music.pause();
+    music.currentTime = 0;
+  });
+  musicToggle.textContent = '🔇';
+  musicToggle.classList.remove('playing');
+  musicToggle.setAttribute('aria-pressed', 'false');
+}
+
+function toggleMusic(){
+  if(music.paused){
+    playMusic();
+  } else {
+    fadeAudio(music, 0, 400, () => music.pause());
+    musicToggle.textContent = '🔇';
+    musicToggle.classList.remove('playing');
+    musicToggle.setAttribute('aria-pressed', 'false');
+  }
+}
+
+musicToggle.addEventListener('click', toggleMusic);
+
 function openSpecialPage(){
   spawnBtnBurst(specialBtn);
 
@@ -1375,6 +1461,7 @@ function openSpecialPage(){
       for(let i = 0; i < 12; i++) setTimeout(spawnConfetti, i * 80);
       confettiInterval = setInterval(spawnConfetti, 260);
     }
+    playMusic();
     specialClose.focus();
   }, delay);
 }
@@ -1386,6 +1473,7 @@ function closeSpecialPage(){
     clearInterval(confettiInterval);
     confettiInterval = null;
   }
+  stopMusic();
   specialBtn.focus();
 }
 
@@ -1398,6 +1486,6 @@ document.addEventListener('keydown', (e) => {
   if(e.key === 'Escape' && specialPage.classList.contains('open')) closeSpecialPage();
 });
 </script>
-
+<audio id="bday-music" src="yehfitoor.mp3" preload="auto" loop></audio>
 </body>
 </html>
