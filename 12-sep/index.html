@@ -583,6 +583,117 @@
     font-size:1.6rem;
   }
 
+  /* ---------- Gallery (scattered polaroid collage) ---------- */
+  #gallery{ max-width:960px; }
+  .gallery-intro{ max-width:56ch; margin:0 auto 2.6rem auto; text-align:center; }
+  .gallery-intro code{
+    font-family:'Lora', serif;
+    font-style:italic;
+    color:var(--rose-gold);
+    background:rgba(217,165,102,0.1);
+    padding:0.1em 0.4em;
+    border-radius:4px;
+  }
+
+  .polaroid-wall{
+    position:relative;
+    --ring: clamp(300px, 62vw, 480px);
+    width:var(--ring);
+    height:var(--ring);
+    margin:2.6rem auto 1.6rem;
+  }
+  .polaroid-doodle{
+    position:absolute;
+    pointer-events:none;
+    color:var(--rose-gold);
+    opacity:0.5;
+    filter:drop-shadow(0 0 6px rgba(217,165,102,0.35));
+  }
+  .polaroid-doodle.d1{ top:-4%; left:2%; font-size:1.4rem; transform:rotate(-12deg); }
+  .polaroid-doodle.d2{ top:10%; right:-2%; font-size:1.1rem; transform:rotate(10deg); }
+  .polaroid-doodle.d3{ bottom:6%; left:-3%; font-size:1.2rem; transform:rotate(8deg); }
+  .polaroid-doodle.d4{ bottom:-4%; right:4%; font-size:1.3rem; transform:rotate(-8deg); }
+
+  .polaroid{
+    position:absolute;
+    top:50%;
+    left:50%;
+    background:var(--cream);
+    padding:9px 9px 26px 9px;
+    border-radius:3px;
+    width:clamp(84px, 12.5vw, 124px);
+    box-shadow:0 14px 26px -12px rgba(0,0,0,0.65);
+    transition:transform 0.35s ease, box-shadow 0.35s ease, z-index 0s;
+  }
+  .polaroid:not(.polaroid--hero){
+    --radius:calc(var(--ring) / 2 - 54px);
+    transform:
+      translate(-50%,-50%)
+      rotate(var(--angle, 0deg))
+      translateY(calc(-1 * var(--radius)))
+      rotate(calc(-1 * var(--angle, 0deg)))
+      rotate(var(--rot, 0deg));
+  }
+  .polaroid:not(.polaroid--hero):hover{
+    transform:
+      translate(-50%,-50%)
+      rotate(var(--angle, 0deg))
+      translateY(calc(-1 * var(--radius)))
+      rotate(calc(-1 * var(--angle, 0deg)))
+      rotate(0deg) scale(1.14);
+    box-shadow:0 22px 40px -14px rgba(201,24,74,0.55);
+    z-index:30;
+  }
+  .polaroid .frame{
+    position:relative;
+    width:100%;
+    aspect-ratio:1/1.02;
+    overflow:hidden;
+    background:linear-gradient(160deg, #e9dccb, #cbb797);
+  }
+  .polaroid img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    display:block;
+  }
+  .polaroid.is-placeholder img{
+    object-fit:contain;
+    padding:20%;
+    opacity:0.55;
+    filter:invert(0.75) sepia(1) saturate(3) hue-rotate(-10deg);
+  }
+  .polaroid .cap{
+    display:block;
+    text-align:center;
+    font-family:'Caveat', cursive;
+    font-size:0.95rem;
+    color:#3a2a1d;
+    margin-top:6px;
+  }
+  .polaroid .tape{
+    position:absolute;
+    top:-11px;
+    left:50%;
+    width:40px;
+    height:15px;
+    background:rgba(217,165,102,0.6);
+    box-shadow:0 3px 6px rgba(0,0,0,0.35);
+    transform:translateX(-50%) rotate(var(--tape-rot, -4deg));
+  }
+
+  .polaroid--hero{
+    width:clamp(150px, 22vw, 210px);
+    z-index:5;
+    box-shadow:0 24px 48px -16px rgba(201,24,74,0.55);
+    transform:translate(-50%,-50%) rotate(var(--rot, 0deg));
+  }
+  .polaroid--hero .cap{ font-size:1.15rem; }
+  .polaroid--hero:hover{
+    transform:translate(-50%,-50%) rotate(0deg) scale(1.06);
+    z-index:31;
+  }
+
   /* ---------- Birthday closer ---------- */
   .closer{
     min-height:80svh;
@@ -630,6 +741,170 @@
     font-size:1.8rem;
     letter-spacing:0.5rem;
     position:relative;
+  }
+
+  /* ---------- Special card button ---------- */
+  .special-card-btn{
+    margin-top:2.6rem;
+    position:relative;
+    z-index:2;
+    font-family:'Caveat', cursive;
+    font-size:1.35rem;
+    font-weight:600;
+    color:var(--cream);
+    background:linear-gradient(135deg, var(--crimson), var(--crimson-deep));
+    border:1px solid rgba(217,165,102,0.5);
+    border-radius:999px;
+    padding:0.9rem 2rem;
+    cursor:pointer;
+    box-shadow:0 10px 28px -10px rgba(201,24,74,0.7);
+    transition:transform 0.25s ease, box-shadow 0.25s ease, filter 0.25s ease;
+    -webkit-tap-highlight-color:transparent;
+  }
+  .special-card-btn:hover{
+    transform:translateY(-3px) scale(1.03);
+    box-shadow:0 16px 36px -10px rgba(201,24,74,0.85);
+    filter:brightness(1.08);
+  }
+  .special-card-btn:active{
+    transform:translateY(0) scale(0.98);
+  }
+
+  /* ---------- Special birthday card page ---------- */
+  #special-page{
+    position:fixed;
+    inset:0;
+    z-index:9998;
+    background:
+      radial-gradient(circle at 50% 20%, rgba(201,24,74,0.18), transparent 60%),
+      linear-gradient(180deg, var(--bg-panel-2), var(--bg-deep));
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:6vh 5vw;
+    opacity:0;
+    visibility:hidden;
+    transform:translateY(16px);
+    transition:opacity 0.5s ease, transform 0.5s ease, visibility 0s linear 0.5s;
+    overflow-y:auto;
+  }
+  #special-page.open{
+    opacity:1;
+    visibility:visible;
+    transform:translateY(0);
+    transition:opacity 0.5s ease, transform 0.5s ease, visibility 0s linear 0s;
+  }
+  .special-card{
+    position:relative;
+    max-width:720px;
+    width:100%;
+    margin:auto;
+    background:linear-gradient(180deg, #1a0a0e, #150709);
+    border:1px solid var(--line);
+    border-radius:18px;
+    padding:clamp(2rem, 6vw, 3.2rem);
+    text-align:center;
+    box-shadow:0 30px 70px -25px rgba(0,0,0,0.8);
+    opacity:0;
+    transform:translateY(20px) scale(0.97);
+    transition:opacity 0.6s ease 0.15s, transform 0.6s ease 0.15s;
+  }
+  #special-page.open .special-card{
+    opacity:1;
+    transform:translateY(0) scale(1);
+  }
+  .special-card .seal{
+    width:56px; height:56px;
+    margin:0 auto 1.2rem auto;
+    border-radius:50%;
+    background:radial-gradient(circle at 35% 30%, #e14a67, var(--crimson) 55%, var(--crimson-deep) 100%);
+    box-shadow:0 8px 22px -6px rgba(201,24,74,0.7);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:1.4rem;
+  }
+  .special-card .cake{
+    font-size:3rem;
+    margin-bottom:0.6rem;
+    filter:drop-shadow(0 0 12px rgba(217,165,102,0.5));
+    animation:pulse 2.4s ease-in-out infinite;
+  }
+  .special-card .script-big{
+    font-family:'Caveat', cursive;
+    color:var(--rose-gold);
+    font-size:1.5rem;
+    display:block;
+    margin-bottom:0.6rem;
+  }
+  .special-card h3{
+    font-family:'Playfair Display', serif;
+    font-style:italic;
+    font-weight:700;
+    font-size:clamp(1.8rem, 5vw, 2.6rem);
+    margin:0 0 1.1rem 0;
+    background:linear-gradient(120deg, var(--crimson), var(--rose-gold));
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+  }
+  .special-card p{
+    color:var(--cream);
+    opacity:0.92;
+    font-size:1.02rem;
+    line-height:1.85;
+    margin:0 0 1rem 0;
+  }
+  .special-card .signoff{
+    margin-top:1.4rem;
+    font-family:'Caveat', cursive;
+    color:var(--rose-gold);
+    font-size:1.5rem;
+    display:block;
+  }
+  .special-card .confetti-row{
+    margin-top:1.6rem;
+    font-size:1.6rem;
+    letter-spacing:0.4rem;
+  }
+  .special-page-close{
+    position:absolute;
+    top:1.4rem;
+    right:1.4rem;
+    width:38px; height:38px;
+    border-radius:50%;
+    border:1px solid var(--line);
+    background:rgba(255,255,255,0.04);
+    color:var(--cream);
+    font-size:1.1rem;
+    line-height:1;
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    transition:background 0.25s ease, transform 0.25s ease;
+  }
+  .special-page-close:hover{
+    background:rgba(201,24,74,0.25);
+    transform:rotate(90deg);
+  }
+  .special-confetti-field{
+    position:absolute;
+    inset:0;
+    overflow:hidden;
+    pointer-events:none;
+    border-radius:18px;
+  }
+  .special-confetti-field span{
+    position:absolute;
+    top:-8%;
+    opacity:0;
+    animation:confetti-fall linear forwards;
+  }
+  @keyframes confetti-fall{
+    0%{ transform:translateY(0) rotate(0deg); opacity:0; }
+    10%{ opacity:0.95; }
+    100%{ transform:translateY(120%) rotate(var(--rot, 180deg)); opacity:0; }
   }
 
   footer{
@@ -773,10 +1048,60 @@
     <p class="reveal">Whatever else is unclear right now — this isn't. Happy birthday.</p>
     <p class="reveal" style="margin-top:1.6rem; color:var(--muted); font-size:0.98rem; max-width:44ch; line-height:1.75;">It's 3:02 PM, 12 September 2026 right now. You're probably wondering why I didn't wish you at 12 o'clock — so let me explain. You were born on 12 September, but not at midnight. You were born at exactly 3:02 PM. So I'm not late — I wanted to wish you at the exact moment you arrived in this universe, the very moment you first cried. Everyone else — your family, your friends — wished you early. But I waited. That's how special you are to me, Jiya.</p>
     <div class="emoji-row reveal">🙂 ❤️ 🫂</div>
+    <button type="button" id="special-card-btn" class="special-card-btn reveal">🎂 Your Special Birthday Card</button>
   </section>
 
   <footer class="reveal">made with the late nights we used to keep</footer>
 
+</div>
+
+<!-- SPECIAL BIRTHDAY CARD PAGE -->
+<div id="special-page" role="dialog" aria-modal="true" aria-label="Special birthday card">
+  <div class="special-card">
+    <div class="special-confetti-field" id="special-confetti-field"></div>
+    <button type="button" class="special-page-close" id="special-page-close" aria-label="Close card">✕</button>
+    <div class="cake">🎂</div>
+    <span class="script-big">just for you</span>
+    <h3>Happy Birthday, Jiya</h3>
+    <p>Of everything on this page, this part is the simplest and the most true: I hope this year treats you gently. I hope you laugh more than you worry, rest more than you push, and feel loved exactly as much as you deserve.</p>
+    <p>Wherever this year takes you, I hope it's kind to you.</p>
+
+    <hr class="thread" style="margin:2.2rem 0 2rem 0;">
+
+    <span class="script-big">little pieces of us</span>
+    <p class="gallery-intro">Drop your photos into a folder named <code>photos</code> next to this file, then rename them <code>big.jpg</code> and <code>1.jpg</code> through <code>14.jpg</code> — they'll slot in automatically. No code editing needed.</p>
+
+    <div class="polaroid-wall">
+      <span class="polaroid-doodle d1">❤</span>
+      <span class="polaroid-doodle d2">✨</span>
+      <span class="polaroid-doodle d3">❤</span>
+      <span class="polaroid-doodle d4">✨</span>
+
+      <div class="polaroid polaroid--hero" style="--rot:-3deg;">
+        <span class="tape" style="--tape-rot:-6deg;"></span>
+        <div class="frame"><img src="C:\Users\NaiyaPatel\OneDrive\Desktop\card\1.png" alt="Our favourite photo" loading="lazy" onerror="handleSlotImgError(this)"></div>
+        <span class="cap">the one ❤</span>
+      </div>
+
+      <div class="polaroid" style="--angle:0deg; --rot:6deg;"><div class="frame"><img src="C:\Users\NaiyaPatel\OneDrive\Desktop\card\2.jpeg" alt="Memory 1" loading="lazy" onerror="handleSlotImgError(this)"></div><span class="cap">01</span></div>
+      <div class="polaroid" style="--angle:25.71deg; --rot:-8deg;"><span class="tape" style="--tape-rot:5deg;"></span><div class="frame"><img src="C:\Users\NaiyaPatel\OneDrive\Desktop\card\3.jpeg" alt="Memory 2" loading="lazy" onerror="handleSlotImgError(this)"></div><span class="cap">02</span></div>
+      <div class="polaroid" style="--angle:51.43deg; --rot:4deg;"><div class="frame"><img src="C:\Users\NaiyaPatel\OneDrive\Desktop\card\4.jpeg" alt="Memory 3" loading="lazy" onerror="handleSlotImgError(this)"></div><span class="cap">03</span></div>
+      <div class="polaroid" style="--angle:77.14deg; --rot:-5deg;"><div class="frame"><img src="C:\Users\NaiyaPatel\OneDrive\Desktop\card\5.jpeg" alt="Memory 4" loading="lazy" onerror="handleSlotImgError(this)"></div><span class="cap">04</span></div>
+      <div class="polaroid" style="--angle:102.86deg; --rot:7deg;"><span class="tape" style="--tape-rot:-4deg;"></span><div class="frame"><img src="C:\Users\NaiyaPatel\OneDrive\Desktop\card\6.jpeg" alt="Memory 5" loading="lazy" onerror="handleSlotImgError(this)"></div><span class="cap">05</span></div>
+      <div class="polaroid" style="--angle:128.57deg; --rot:-3deg;"><div class="frame"><img src=c:\Users\NaiyaPatel\OneDrive\Desktop\card\7.jpeg alt="Memory 6" loading="lazy" onerror="handleSlotImgError(this)"></div><span class="cap">06</span></div>
+      <div class="polaroid" style="--angle:154.29deg; --rot:9deg;"><div class="frame"><img src="C:\Users\NaiyaPatel\OneDrive\Desktop\card\8.jpeg" alt="Memory 7" loading="lazy" onerror="handleSlotImgError(this)"></div><span class="cap">07</span></div>
+      <div class="polaroid" style="--angle:180deg; --rot:-7deg;"><span class="tape" style="--tape-rot:6deg;"></span><div class="frame"><img src="C:\Users\NaiyaPatel\OneDrive\Desktop\card\9.jpeg" alt="Memory 8" loading="lazy" onerror="handleSlotImgError(this)"></div><span class="cap">08</span></div>
+      <div class="polaroid" style="--angle:205.71deg; --rot:3deg;"><div class="frame"><img src="C:\Users\NaiyaPatel\OneDrive\Desktop\card\10.jpeg" alt="Memory 9" loading="lazy" onerror="handleSlotImgError(this)"></div><span class="cap">09</span></div>
+      <div class="polaroid" style="--angle:231.43deg; --rot:-4deg;"><div class="frame"><img src="C:\Users\NaiyaPatel\OneDrive\Desktop\card\11.jpeg" alt="Memory 10" loading="lazy" onerror="handleSlotImgError(this)"></div><span class="cap">10</span></div>
+      <div class="polaroid" style="--angle:257.14deg; --rot:8deg;"><span class="tape" style="--tape-rot:-5deg;"></span><div class="frame"><img src="C:\Users\NaiyaPatel\OneDrive\Desktop\card\12.jpeg" alt="Memory 11" loading="lazy" onerror="handleSlotImgError(this)"></div><span class="cap">11</span></div>
+      <div class="polaroid" style="--angle:282.86deg; --rot:-6deg;"><div class="frame"><img src="C:\Users\NaiyaPatel\OneDrive\Desktop\card\13.jpeg"alt="Memory 12" loading="lazy" onerror="handleSlotImgError(this)"></div><span class="cap">12</span></div>
+      <div class="polaroid" style="--angle:308.57deg; --rot:5deg;"><div class="frame"><img src="C:\Users\NaiyaPatel\OneDrive\Desktop\card\15.jpeg" alt="Memory 13" loading="lazy" onerror="handleSlotImgError(this)"></div><span class="cap">13</span></div>
+      <div class="polaroid" style="--angle:334.29deg; --rot:-2deg;"><span class="tape" style="--tape-rot:4deg;"></span><div class="frame"><img src="C:\Users\NaiyaPatel\OneDrive\Desktop\card\14.jpeg" alt="Memory 14" loading="lazy" onerror="handleSlotImgError(this)"></div><span class="cap">14</span></div>
+    </div>
+
+    <span class="signoff">— Vedant</span>
+    <div class="confetti-row">🎉 🎈 ✨</div>
+  </div>
 </div>
 
 <script>
@@ -934,6 +1259,69 @@
     }, { threshold: 0.2 });
     closerObserver.observe(document.querySelector('.closer'));
   }
+
+  // ---------- Gallery placeholder handling ----------
+  const SLOT_PLACEHOLDER = 'data:image/svg+xml;utf8,' + encodeURIComponent(
+    '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">' +
+    '<rect width="200" height="200" fill="#1c0c10"/>' +
+    '<path d="M100 165 C45 120 15 88 15 55 C15 28 37 8 62 8 C82 8 96 22 100 38 C104 22 118 8 138 8 C163 8 185 28 185 55 C185 88 155 120 100 165 Z" fill="none" stroke="#d9a566" stroke-width="6" stroke-dasharray="10 8"/>' +
+    '</svg>'
+  );
+
+  function handleSlotImgError(img){
+    if(img.dataset.fallback) return; // avoid loop if placeholder itself errors
+    img.dataset.fallback = 'true';
+    img.src = SLOT_PLACEHOLDER;
+    img.closest('.polaroid').classList.add('is-placeholder');
+  }
+
+  // ---------- Special birthday card page ----------
+  const specialPage = document.getElementById('special-page');
+  const specialBtn = document.getElementById('special-card-btn');
+  const specialClose = document.getElementById('special-page-close');
+  const confettiField = document.getElementById('special-confetti-field');
+  let confettiInterval = null;
+
+  function spawnConfetti(){
+    const el = document.createElement('span');
+    el.textContent = ['🎉','🎈','✨','💛','❤️'][Math.floor(Math.random() * 5)];
+    el.style.left = Math.random() * 100 + '%';
+    el.style.fontSize = (Math.random() * 0.7 + 0.8) + 'rem';
+    el.style.setProperty('--rot', (Math.random() * 360) + 'deg');
+    const duration = Math.random() * 2 + 2.5;
+    el.style.animationDuration = duration + 's';
+    confettiField.appendChild(el);
+    setTimeout(() => el.remove(), duration * 1000);
+  }
+
+  function openSpecialPage(){
+    specialPage.classList.add('open');
+    document.body.classList.add('locked');
+    if(!reduceMotion && !confettiInterval){
+      for(let i = 0; i < 12; i++) setTimeout(spawnConfetti, i * 80);
+      confettiInterval = setInterval(spawnConfetti, 260);
+    }
+    specialClose.focus();
+  }
+
+  function closeSpecialPage(){
+    specialPage.classList.remove('open');
+    document.body.classList.remove('locked');
+    if(confettiInterval){
+      clearInterval(confettiInterval);
+      confettiInterval = null;
+    }
+    specialBtn.focus();
+  }
+
+  specialBtn.addEventListener('click', openSpecialPage);
+  specialClose.addEventListener('click', closeSpecialPage);
+  specialPage.addEventListener('click', (e) => {
+    if(e.target === specialPage) closeSpecialPage();
+  });
+  document.addEventListener('keydown', (e) => {
+    if(e.key === 'Escape' && specialPage.classList.contains('open')) closeSpecialPage();
+  });
 </script>
 
 </body>
