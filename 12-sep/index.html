@@ -597,7 +597,7 @@
 
   .polaroid-wall{
     position:relative;
-    --ring: clamp(300px, 62vw, 480px);
+    --ring: clamp(340px, 84vw, 660px);
     width:var(--ring);
     height:var(--ring);
     margin:2.6rem auto 1.6rem;
@@ -621,12 +621,12 @@
     background:var(--cream);
     padding:9px 9px 26px 9px;
     border-radius:3px;
-    width:clamp(84px, 12.5vw, 124px);
+    width:clamp(96px, 13.5vw, 148px);
     box-shadow:0 14px 26px -12px rgba(0,0,0,0.65);
     transition:transform 0.35s ease, box-shadow 0.35s ease, z-index 0s;
   }
   .polaroid:not(.polaroid--hero){
-    --radius:calc(var(--ring) / 2 - 54px);
+    --radius:calc(var(--ring) / 2 - 64px);
     transform:
       translate(-50%,-50%)
       rotate(var(--angle, 0deg))
@@ -683,7 +683,7 @@
   }
 
   .polaroid--hero{
-    width:clamp(150px, 22vw, 210px);
+    width:clamp(170px, 25vw, 240px);
     z-index:5;
     box-shadow:0 24px 48px -16px rgba(201,24,74,0.55);
     transform:translate(-50%,-50%) rotate(var(--rot, 0deg));
@@ -769,6 +769,46 @@
   .special-card-btn:active{
     transform:translateY(0) scale(0.98);
   }
+  /* ---------- Button click burst ---------- */
+.btn-burst-particle{
+  position:fixed;
+  pointer-events:none;
+  z-index:9997;
+  font-size:1.4rem;
+  animation:btn-particle-fly 0.85s ease-out forwards;
+}
+@keyframes btn-particle-fly{
+  0%{ transform:translate(-50%,-50%) scale(0.4); opacity:1; }
+  100%{ transform:translate(calc(-50% + var(--tx)), calc(-50% + var(--ty))) scale(1.3); opacity:0; }
+}
+.btn-burst-ring{
+  position:fixed;
+  pointer-events:none;
+  z-index:9996;
+  width:16px; height:16px;
+  border:3px solid var(--crimson);
+  border-radius:50%;
+  transform:translate(-50%,-50%) scale(1);
+  opacity:1;
+  animation:btn-ring-expand 0.55s ease-out forwards;
+}
+@keyframes btn-ring-expand{
+  0%{ transform:translate(-50%,-50%) scale(1); opacity:1; }
+  100%{ transform:translate(-50%,-50%) scale(9); opacity:0; }
+}
+
+/* ---------- Livelier card entrance ---------- */
+.special-card{
+  transform-origin:center center;
+}
+#special-page.open .special-card{
+  animation:card-unfold 0.7s cubic-bezier(.2,.9,.25,1.15) 0.1s both;
+}
+@keyframes card-unfold{
+  0%{ opacity:0; transform:translateY(30px) scale(0.82) rotate(-3deg); }
+  55%{ opacity:1; transform:translateY(-6px) scale(1.03) rotate(1deg); }
+  100%{ opacity:1; transform:translateY(0) scale(1) rotate(0deg); }
+}
 
   /* ---------- Special birthday card page ---------- */
   #special-page{
@@ -796,7 +836,7 @@
   }
   .special-card{
     position:relative;
-    max-width:720px;
+    max-width:880px;
     width:100%;
     margin:auto;
     background:linear-gradient(180deg, #1a0a0e, #150709);
@@ -1069,8 +1109,7 @@
     <hr class="thread" style="margin:2.2rem 0 2rem 0;">
 
     <span class="script-big">little pieces of us</span>
-    <p class="gallery-intro">Drop your photos into a folder named <code>photos</code> next to this file, then rename them <code>big.jpg</code> and <code>1.jpg</code> through <code>14.jpg</code> — they'll slot in automatically. No code editing needed.</p>
-
+    
     <div class="polaroid-wall">
       <span class="polaroid-doodle d1">❤</span>
       <span class="polaroid-doodle d2">✨</span>
@@ -1099,10 +1138,6 @@
       <div class="polaroid" style="--angle:334.29deg; --rot:-2deg;"><span class="tape" style="--tape-rot:4deg;"></span><div class="frame"><img src="14.jpeg" alt="Memory 14" loading="lazy" onerror="handleSlotImgError(this)"></div><span class="cap">14</span></div>
     </div>
 
-    <span class="signoff">— Vedant</span>
-    <div class="confetti-row">🎉 🎈 ✨</div>
-  </div>
-</div>
 
 <script>
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -1294,7 +1329,46 @@
     setTimeout(() => el.remove(), duration * 1000);
   }
 
-  function openSpecialPage(){
+ function spawnBtnBurst(originEl){
+  const rect = originEl.getBoundingClientRect();
+  const cx = rect.left + rect.width / 2;
+  const cy = rect.top + rect.height / 2;
+
+  // expanding ring
+  const ring = document.createElement('div');
+  ring.className = 'btn-burst-ring';
+  ring.style.left = cx + 'px';
+  ring.style.top = cy + 'px';
+  document.body.appendChild(ring);
+  setTimeout(() => ring.remove(), 600);
+
+  if (reduceMotion) return;
+
+  // bursting particles
+  const emojis = ['🎉','💖','✨','🎂','❤️'];
+  const count = 12;
+  for (let i = 0; i < count; i++){
+    const p = document.createElement('div');
+    p.className = 'btn-burst-particle';
+    p.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+    p.style.left = cx + 'px';
+    p.style.top = cy + 'px';
+
+    const angle = (Math.PI * 2 * i) / count + (Math.random() * 0.4 - 0.2);
+    const distance = 70 + Math.random() * 90;
+    p.style.setProperty('--tx', Math.cos(angle) * distance + 'px');
+    p.style.setProperty('--ty', Math.sin(angle) * distance + 'px');
+
+    document.body.appendChild(p);
+    setTimeout(() => p.remove(), 900);
+  }
+}
+
+function openSpecialPage(){
+  spawnBtnBurst(specialBtn);
+
+  const delay = reduceMotion ? 0 : 150;
+  setTimeout(() => {
     specialPage.classList.add('open');
     document.body.classList.add('locked');
     if(!reduceMotion && !confettiInterval){
@@ -1302,26 +1376,27 @@
       confettiInterval = setInterval(spawnConfetti, 260);
     }
     specialClose.focus();
-  }
+  }, delay);
+}
 
-  function closeSpecialPage(){
-    specialPage.classList.remove('open');
-    document.body.classList.remove('locked');
-    if(confettiInterval){
-      clearInterval(confettiInterval);
-      confettiInterval = null;
-    }
-    specialBtn.focus();
+function closeSpecialPage(){
+  specialPage.classList.remove('open');
+  document.body.classList.remove('locked');
+  if(confettiInterval){
+    clearInterval(confettiInterval);
+    confettiInterval = null;
   }
+  specialBtn.focus();
+}
 
-  specialBtn.addEventListener('click', openSpecialPage);
-  specialClose.addEventListener('click', closeSpecialPage);
-  specialPage.addEventListener('click', (e) => {
-    if(e.target === specialPage) closeSpecialPage();
-  });
-  document.addEventListener('keydown', (e) => {
-    if(e.key === 'Escape' && specialPage.classList.contains('open')) closeSpecialPage();
-  });
+specialBtn.addEventListener('click', openSpecialPage);
+specialClose.addEventListener('click', closeSpecialPage);
+specialPage.addEventListener('click', (e) => {
+  if(e.target === specialPage) closeSpecialPage();
+});
+document.addEventListener('keydown', (e) => {
+  if(e.key === 'Escape' && specialPage.classList.contains('open')) closeSpecialPage();
+});
 </script>
 
 </body>
