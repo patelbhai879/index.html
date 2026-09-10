@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+  <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -983,6 +983,577 @@
     outline:2px solid var(--crimson);
     outline-offset:3px;
   }
+
+/* ===== BEAUTY BUTTON ===== */
+.beauty-btn{
+  display:block;
+  margin:0.35rem auto 0;
+  position:relative;
+  z-index:20;
+  padding:.95rem 2.5rem;
+  border:1px solid rgba(217,165,102,.65);
+  border-radius:999px;
+  background:linear-gradient(135deg,var(--crimson),var(--crimson-deep));
+  color:var(--cream);
+  font-family:'Caveat',cursive;
+  font-size:1.55rem;
+  font-weight:700;
+  cursor:pointer;
+  box-shadow:0 12px 34px -10px rgba(201,24,74,.75);
+  transition:transform .25s ease,box-shadow .25s ease,filter .25s ease;
+}
+.beauty-btn:hover{
+  transform:translateY(-3px) scale(1.05);
+  box-shadow:0 18px 42px -10px rgba(201,24,74,.9);
+  filter:brightness(1.1);
+}
+.beauty-btn:active{transform:scale(.97);}
+
+/* ===== BEAUTY FULL-SCREEN PAGE ===== */
+#beauty-page{
+  position:fixed;
+  inset:0;
+  z-index:10050;
+  overflow-y:auto;
+  padding:7vh 5vw 8vh;
+  background:
+    radial-gradient(circle at 50% 12%,rgba(201,24,74,.24),transparent 40%),
+    radial-gradient(circle at 15% 85%,rgba(217,165,102,.10),transparent 35%),
+    linear-gradient(180deg,#261015 0%,#100608 100%);
+  opacity:0;
+  visibility:hidden;
+  transform:scale(1.08);
+  transition:opacity .55s ease,transform .65s cubic-bezier(.2,.85,.2,1),visibility 0s linear .55s;
+}
+#beauty-page.open{
+  opacity:1;
+  visibility:visible;
+  transform:scale(1);
+  transition:opacity .55s ease,transform .65s cubic-bezier(.2,.85,.2,1),visibility 0s linear 0s;
+}
+.beauty-page-glow{
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  background:radial-gradient(circle at center,rgba(201,24,74,.08),transparent 58%);
+  animation:beautyGlow 4s ease-in-out infinite;
+}
+@keyframes beautyGlow{
+  0%,100%{opacity:.5;transform:scale(1)}
+  50%{opacity:1;transform:scale(1.08)}
+}
+.beauty-page-content{
+  position:relative;
+  z-index:2;
+  max-width:1000px;
+  margin:auto;
+  text-align:center;
+}
+.beauty-script{
+  display:block;
+  color:var(--rose-gold);
+  font-family:'Caveat',cursive;
+  font-size:1.5rem;
+  opacity:0;
+  transform:translateY(20px);
+}
+.beauty-page-content h2{
+  margin:.2rem 0 .5rem;
+  font-family:'Playfair Display',serif;
+  font-style:italic;
+  font-size:clamp(2.7rem,7vw,5rem);
+  background:linear-gradient(120deg,var(--cream),var(--rose-gold),var(--crimson));
+  -webkit-background-clip:text;
+  background-clip:text;
+  color:transparent;
+  opacity:0;
+  transform:translateY(25px) scale(.94);
+}
+.beauty-sub{
+  margin:0 0 2.7rem;
+  color:var(--muted);
+  opacity:0;
+  transform:translateY(20px);
+}
+#beauty-page.open .beauty-script{animation:beautyTitle .7s ease .12s both}
+#beauty-page.open h2{animation:beautyTitle .8s cubic-bezier(.2,.9,.2,1) .22s both}
+#beauty-page.open .beauty-sub{animation:beautyTitle .7s ease .38s both}
+@keyframes beautyTitle{
+  to{opacity:1;transform:translateY(0) scale(1)}
+}
+.beauty-grid{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:2rem;
+  max-width:900px;
+  margin:auto;
+}
+.beauty-card{
+  position:relative;
+  padding:13px 13px 40px;
+  background:var(--cream);
+  border-radius:6px;
+  box-shadow:0 25px 55px -18px rgba(0,0,0,.85);
+  opacity:0;
+}
+#beauty-page.open .beauty-card:nth-child(1){animation:beautyCard .8s cubic-bezier(.2,.9,.2,1) .45s both}
+#beauty-page.open .beauty-card:nth-child(2){animation:beautyCard .8s cubic-bezier(.2,.9,.2,1) .60s both}
+#beauty-page.open .beauty-card:nth-child(3){animation:beautyCard .8s cubic-bezier(.2,.9,.2,1) .75s both}
+#beauty-page.open .beauty-card:nth-child(4){animation:beautyCard .8s cubic-bezier(.2,.9,.2,1) .90s both}
+@keyframes beautyCard{
+  0%{opacity:0;transform:translateY(65px) scale(.8) rotate(-6deg)}
+  70%{opacity:1;transform:translateY(-7px) scale(1.025) rotate(2deg)}
+  100%{opacity:1;transform:translateY(0) scale(1) rotate(0)}
+}
+.beauty-card:hover{
+  transform:translateY(-8px) scale(1.025)!important;
+  box-shadow:0 32px 65px -18px rgba(201,24,74,.55);
+}
+.beauty-photo{
+  width:100%;
+  aspect-ratio:1/1;
+  overflow:hidden;
+  background:#14070a;
+}
+.beauty-photo img{
+  display:block;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  transition:transform .7s ease;
+}
+.beauty-card:hover .beauty-photo img{transform:scale(1.06)}
+.beauty-caption{
+  margin-top:8px;
+  color:#3a2a1d;
+  font-family:'Caveat',cursive;
+  font-size:1.2rem;
+  font-weight:600;
+}
+.beauty-heart{
+  position:absolute;
+  top:-14px;
+  left:50%;
+  z-index:3;
+  transform:translateX(-50%);
+  font-size:1.3rem;
+  filter:drop-shadow(0 3px 5px rgba(0,0,0,.4));
+}
+.beauty-page-close{
+  position:fixed;
+  top:1.3rem;
+  right:1.3rem;
+  z-index:10;
+  width:44px;
+  height:44px;
+  border-radius:50%;
+  border:1px solid var(--line);
+  background:rgba(255,255,255,.06);
+  color:var(--cream);
+  font-size:1.15rem;
+  cursor:pointer;
+  transition:transform .25s ease,background .25s ease;
+}
+.beauty-page-close:hover{
+  transform:rotate(90deg) scale(1.08);
+  background:rgba(201,24,74,.3);
+}
+@media(max-width:700px){
+  #beauty-page{padding:6.5rem 1rem 3rem}
+  .beauty-grid{grid-template-columns:1fr;max-width:470px;gap:1.5rem}
+}
+
+
+/* --- 9 PHOTO SCATTERED / SCRAPBOOK LAYOUT --- */
+.beauty-collage{
+  position:relative !important;
+  width:min(900px,92vw) !important;
+  height:720px !important;
+  margin:28px auto 0 !important;
+  display:block !important;
+}
+.beauty-photo{
+  position:absolute !important;
+  width:clamp(145px,18vw,205px) !important;
+  padding:10px 10px 30px !important;
+  background:#fffaf2 !important;
+  border:1px solid rgba(120,70,50,.22);
+  box-shadow:0 14px 30px rgba(0,0,0,.32),0 2px 5px rgba(0,0,0,.18);
+  transform:rotate(var(--r)) !important;
+  transition:transform .35s ease,box-shadow .35s ease;
+}
+.beauty-photo::before{
+  content:"";
+  position:absolute;
+  top:-9px;
+  left:50%;
+  width:58px;
+  height:19px;
+  transform:translateX(-50%) rotate(var(--t));
+  background:rgba(194,145,76,.72);
+}
+.beauty-photo img{
+  display:block;
+  width:100%;
+  aspect-ratio:1/1.12;
+  object-fit:cover;
+}
+.beauty-photo:hover{
+  z-index:50 !important;
+  transform:translateY(-10px) rotate(0deg) scale(1.05) !important;
+}
+.beauty-p1{--r:-7deg;--t:-3deg;left:3%;top:8%;z-index:4}
+.beauty-p2{--r:5deg;--t:4deg;left:29%;top:1%;z-index:8}
+.beauty-p3{--r:-4deg;--t:-2deg;right:4%;top:10%;z-index:5}
+.beauty-p4{--r:7deg;--t:3deg;left:10%;top:30%;z-index:9}
+.beauty-p5{--r:-3deg;--t:-4deg;left:39%;top:27%;z-index:14}
+.beauty-p6{--r:6deg;--t:4deg;right:10%;top:32%;z-index:7}
+.beauty-p7{--r:-8deg;--t:2deg;left:1%;top:57%;z-index:6}
+.beauty-p8{--r:3deg;--t:-3deg;left:34%;top:59%;z-index:10}
+.beauty-p9{--r:-6deg;--t:4deg;right:1%;top:57%;z-index:5}
+
+@media(max-width:700px){
+  .beauty-collage{
+    width:96vw !important;
+    height:650px !important;
+    min-height:650px !important;
+  }
+  .beauty-photo{
+    width:clamp(105px,29vw,150px) !important;
+    padding:7px 7px 23px !important;
+  }
+  .beauty-p1{left:0;top:8%}
+  .beauty-p2{left:32%;top:1%}
+  .beauty-p3{right:0;top:10%}
+  .beauty-p4{left:5%;top:31%}
+  .beauty-p5{left:35%;top:27%}
+  .beauty-p6{right:4%;top:34%}
+  .beauty-p7{left:0;top:58%}
+  .beauty-p8{left:34%;top:61%}
+  .beauty-p9{right:0;top:59%}
+}
+
+
+/* ===== BEAUTY PAGE — GIRL BIRTHDAY COLLAGE DESIGN ===== */
+#beauty-page{
+  background:#dce2cf !important;
+  color:#fff !important;
+  overflow-y:auto !important;
+}
+.beauty-page-content.beauty-girl-layout{
+  position:relative;
+  width:min(920px,96vw);
+  min-height:900px;
+  margin:0 auto;
+  padding:38px 35px 70px;
+  overflow:hidden;
+  text-align:left;
+  background:
+    radial-gradient(circle at 12% 20%,rgba(255,255,255,.09),transparent 25%),
+    radial-gradient(circle at 85% 80%,rgba(60,75,55,.18),transparent 35%),
+    linear-gradient(135deg,#78896f,#687b61 55%,#71846a);
+  box-shadow:inset 0 0 90px rgba(30,45,30,.18);
+}
+.beauty-paper-texture{
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  opacity:.18;
+  background-image:
+    repeating-linear-gradient(0deg,rgba(255,255,255,.08) 0,rgba(255,255,255,.08) 1px,transparent 1px,transparent 5px),
+    repeating-linear-gradient(90deg,rgba(30,50,30,.06) 0,rgba(30,50,30,.06) 1px,transparent 1px,transparent 7px);
+}
+.beauty-top-camera{
+  position:absolute;
+  left:45px;
+  top:36px;
+  transform:rotate(-15deg);
+  font-size:35px;
+  z-index:4;
+}
+.beauty-happy{
+  position:relative;
+  z-index:2;
+  margin-left:58px;
+  font-family:cursive;
+  font-size:34px;
+  line-height:.9;
+  color:#fff;
+  text-shadow:1px 2px 2px rgba(0,0,0,.25);
+}
+.beauty-big-title{
+  position:relative;
+  z-index:2;
+  margin:0 0 3px 38px;
+  font-family:Georgia,serif;
+  font-size:78px;
+  line-height:.86;
+  letter-spacing:-3px;
+  color:#fff;
+  text-shadow:2px 3px 0 rgba(0,0,0,.15);
+}
+.beauty-name{
+  position:absolute;
+  z-index:4;
+  right:220px;
+  top:105px;
+  font-family:cursive;
+  font-size:31px;
+  color:#fff;
+  transform:rotate(-4deg);
+}
+.beauty-calendar{
+  position:absolute;
+  right:58px;
+  top:158px;
+  width:265px;
+  z-index:3;
+  color:#fff;
+  text-align:center;
+  font-family:Georgia,serif;
+}
+.cal-month{
+  font-size:25px;
+  font-weight:bold;
+  margin-bottom:10px;
+}
+.cal-days{
+  font-size:9px;
+  letter-spacing:.2px;
+  margin-bottom:8px;
+  white-space:nowrap;
+}
+.cal-grid{
+  display:grid;
+  grid-template-columns:repeat(7,1fr);
+  gap:6px 5px;
+  font-size:10px;
+}
+.cal-grid span{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  min-height:14px;
+}
+.cal-heart{
+  border:1.5px solid rgba(255,255,255,.85);
+  border-radius:50%;
+  transform:scale(1.25);
+  font-weight:bold;
+}
+.beauty-left-photos{
+  position:absolute;
+  left:45px;
+  top:190px;
+  width:205px;
+  z-index:10;
+}
+.girl-polaroid{
+  position:absolute;
+  width:175px;
+  padding:9px 9px 30px;
+  background:#fff;
+  box-shadow:0 5px 13px rgba(0,0,0,.2);
+  text-align:center;
+  transform:rotate(var(--rot));
+}
+.girl-polaroid img{
+  width:100%;
+  height:145px;
+  object-fit:cover;
+  display:block;
+}
+.girl-polaroid span{
+  position:absolute;
+  bottom:3px;
+  left:0;
+  right:0;
+  color:#e84f6b;
+  font-size:27px;
+  line-height:25px;
+}
+.gp1{--rot:-.5deg;left:0;top:0}
+.gp2{--rot:.8deg;left:0;top:182px}
+.gp3{--rot:-.7deg;left:0;top:364px}
+
+.beauty-big-photo{
+  position:absolute;
+  z-index:8;
+  right:60px;
+  top:315px;
+  width:285px;
+  height:510px;
+  overflow:visible;
+}
+.beauty-big-photo img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  object-position:center top;
+  display:block;
+  border-radius:2px;
+  -webkit-mask-image:linear-gradient(#000 94%,transparent 100%);
+  mask-image:linear-gradient(#000 94%,transparent 100%);
+  filter:saturate(.96) contrast(1.02);
+}
+.beauty-mini-photos{
+  position:absolute;
+  left:285px;
+  top:560px;
+  width:230px;
+  height:270px;
+  z-index:12;
+}
+.mini-photo{
+  position:absolute;
+  width:92px;
+  height:112px;
+  padding:6px;
+  background:#fff;
+  box-shadow:0 5px 12px rgba(0,0,0,.22);
+  transform:rotate(var(--r));
+}
+.mini-photo img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
+}
+.mp1{--r:-7deg;left:0;top:5px}
+.mp2{--r:5deg;left:65px;top:0}
+.mp3{--r:-3deg;left:130px;top:12px}
+.mp4{--r:7deg;left:30px;top:115px}
+.mp5{--r:-5deg;left:110px;top:125px}
+.beauty-bottom-caption{
+  position:absolute;
+  left:50%;
+  bottom:28px;
+  transform:translateX(-50%) rotate(-2deg);
+  font-family:cursive;
+  font-size:19px;
+  color:#fff;
+  white-space:nowrap;
+  opacity:.95;
+}
+@media(max-width:700px){
+  .beauty-page-content.beauty-girl-layout{
+    width:100%;
+    min-height:980px;
+    padding:28px 15px 55px;
+  }
+  .beauty-top-camera{left:20px;top:28px;font-size:28px}
+  .beauty-happy{margin-left:35px;font-size:27px}
+  .beauty-big-title{margin-left:20px;font-size:61px}
+  .beauty-name{right:35px;top:96px;font-size:25px}
+  .beauty-calendar{
+    right:18px;
+    top:150px;
+    width:180px;
+  }
+  .cal-month{font-size:19px}
+  .cal-days{font-size:7px}
+  .cal-grid{font-size:8px;gap:5px 3px}
+  .beauty-left-photos{
+    left:16px;
+    top:185px;
+    width:150px;
+  }
+  .girl-polaroid{
+    width:132px;
+    padding:6px 6px 25px;
+  }
+  .girl-polaroid img{height:112px}
+  .girl-polaroid span{font-size:22px}
+  .gp2{top:148px}
+  .gp3{top:296px}
+  .beauty-big-photo{
+    right:10px;
+    top:425px;
+    width:170px;
+    height:350px;
+  }
+  .beauty-mini-photos{
+    left:155px;
+    top:665px;
+    width:205px;
+    height:230px;
+  }
+  .mini-photo{width:72px;height:88px;padding:4px}
+  .mp1{left:0}.mp2{left:52px}.mp3{left:104px}.mp4{left:25px;top:92px}.mp5{left:88px;top:100px}
+  .beauty-bottom-caption{
+    bottom:18px;
+    font-size:14px;
+  }
+}
+
+
+/* FINAL BEAUTY PAGE - FULLSCREEN + NEW DARK ROMANTIC THEME */
+html,body{
+  margin:0!important;padding:0!important;width:100%!important;
+  overflow-x:hidden!important;
+}
+#beauty-page{
+  position:fixed!important;inset:0!important;width:100vw!important;
+  height:100vh!important;margin:0!important;padding:0!important;
+  background:radial-gradient(circle at 15% 20%,rgba(255,90,160,.16),transparent 28%),
+             radial-gradient(circle at 85% 75%,rgba(170,90,255,.18),transparent 30%),
+             linear-gradient(135deg,#160a17,#351126 55%,#100913)!important;
+}
+#beauty-page .beauty-page-content.beauty-girl-layout{
+  box-sizing:border-box!important;width:100%!important;max-width:none!important;
+  min-height:100vh!important;height:100vh!important;margin:0!important;
+  padding:38px 5vw 35px!important;overflow:hidden!important;
+  background:radial-gradient(circle at 50% 40%,rgba(255,90,160,.08),transparent 38%),
+             linear-gradient(135deg,#24101f,#351326 55%,#180c1a)!important;
+  border:0!important;
+}
+#beauty-page .beauty-page-content::after{
+  content:"";position:absolute;inset:16px;border:1px solid rgba(255,185,215,.22);
+  border-radius:22px;pointer-events:none;z-index:1;
+}
+#beauty-page .beauty-happy{color:#ffd6e7!important;text-shadow:0 0 14px rgba(255,105,170,.35)!important}
+#beauty-page .beauty-big-title{color:#fff!important;text-shadow:0 4px 18px rgba(255,70,145,.32)!important}
+#beauty-page .beauty-name{color:#ffc1dc!important}
+#beauty-page .beauty-calendar{color:#ffe7f0!important}
+#beauty-page .cal-heart{border-color:#ff91bc!important;color:#ff91bc!important}
+#beauty-page .girl-polaroid{
+  background:linear-gradient(145deg,#fffdfd,#f7e9ef)!important;
+  box-shadow:0 12px 30px rgba(0,0,0,.42),0 0 18px rgba(255,82,154,.12)!important;
+}
+#beauty-page .girl-polaroid span{color:#e84f82!important}
+
+/* FULL MAIN PHOTO - NO CROPPING */
+#beauty-page .beauty-big-photo{
+  right:7vw!important;top:245px!important;width:min(30vw,390px)!important;
+  height:calc(100vh - 285px)!important;max-height:620px!important;
+  display:flex!important;justify-content:center!important;align-items:flex-end!important;
+}
+#beauty-page .beauty-big-photo img{
+  width:100%!important;height:100%!important;
+  object-fit:contain!important;object-position:center bottom!important;
+  border-radius:0!important;filter:drop-shadow(0 20px 28px rgba(0,0,0,.48))!important;
+  -webkit-mask-image:none!important;mask-image:none!important;
+}
+#beauty-page .mini-photo{box-shadow:0 9px 20px rgba(0,0,0,.42)!important}
+#beauty-page .beauty-bottom-caption{color:#ffc9df!important}
+
+@media(min-width:701px){
+  #beauty-page .beauty-left-photos{left:7vw!important}
+  #beauty-page .beauty-mini-photos{left:39vw!important;top:auto!important;bottom:58px!important}
+}
+@media(max-width:700px){
+  #beauty-page .beauty-page-content.beauty-girl-layout{
+    height:auto!important;min-height:100vh!important;overflow-y:auto!important;
+    padding:26px 14px 45px!important;
+  }
+  #beauty-page .beauty-big-photo{
+    right:8px!important;top:405px!important;width:48vw!important;
+    height:390px!important;max-height:none!important;
+  }
+  #beauty-page .beauty-left-photos{left:14px!important;top:185px!important}
+  #beauty-page .beauty-mini-photos{left:25vw!important;top:690px!important;bottom:auto!important}
+}
+
 </style>
 </head>
 <body class="locked">
@@ -1013,7 +1584,7 @@
 
   <!-- TIMELINE -->
   <section id="timeline">
-    <div class="section-head"><h2>Where it started</h2><span class="script">17.04.2025 →</span></div>
+    <div class="section-head"><h2>Where it started</h2><span class="script">17.07.2025 →</span></div>
     <hr class="thread">
     <div class="timeline">
 
@@ -1161,7 +1732,49 @@
       <div class="polaroid" style="--angle:282.86deg; --rot:-6deg;"><div class="frame"><img src="13.jpeg"alt="Memory 12" loading="lazy" onerror="handleSlotImgError(this)"></div><span class="cap">12</span></div>
       <div class="polaroid" style="--angle:308.57deg; --rot:5deg;"><div class="frame"><img src="15.jpeg" alt="Memory 13" loading="lazy" onerror="handleSlotImgError(this)"></div><span class="cap">13</span></div>
       <div class="polaroid" style="--angle:334.29deg; --rot:-2deg;"><span class="tape" style="--tape-rot:4deg;"></span><div class="frame"><img src="14.jpeg" alt="Memory 14" loading="lazy" onerror="handleSlotImgError(this)"></div><span class="cap">14</span></div>
-    </div>
+
+      
+
+    
+</div>
+
+      <button type="button" id="beauty-btn" class="beauty-btn">✨ The Beauty ✨</button>
+
+
+<!-- THE BEAUTY: SEPARATE FULL-SCREEN PAGE -->
+<div id="beauty-page" role="dialog" aria-modal="true" aria-label="The Beauty">
+  <button type="button" class="beauty-page-close" id="beauty-page-close" aria-label="Close The Beauty">✕</button>
+  <div class="beauty-page-glow"></div>
+  <main class="beauty-page-content beauty-girl-layout">
+          <div class="beauty-paper-texture"></div>
+
+          <div class="beauty-top-camera">📸</div>
+          <div class="beauty-happy">Happy</div>
+          <h2 class="beauty-big-title">Birthday</h2>
+          <div class="beauty-name">Jiya</div>
+
+          <div class="beauty-left-photos">
+            <div class="girl-polaroid gp1"><img src="24.jpeg" alt="Beauty memory 16"><span>♥</span></div>
+            <div class="girl-polaroid gp2"><img src="17.jpeg" alt="Beauty memory 17"><span>♥</span></div>
+            <div class="girl-polaroid gp3"><img src="18.jpg" alt="Beauty memory 18"><span>♥</span></div>
+          </div>
+
+          <div class="beauty-big-photo">
+            <img src="16.jpeg" alt="Beauty main memory">
+          </div>
+
+          <div class="beauty-mini-photos">
+            <div class="mini-photo mp1"><img src="20.jpeg" alt="Beauty memory 20"></div>
+            <div class="mini-photo mp2"><img src="21.jpeg" alt="Beauty memory 21"></div>
+            <div class="mini-photo mp3"><img src="22.jpeg" alt="Beauty memory 22"></div>
+            <div class="mini-photo mp4"><img src="23.jpeg" alt="Beauty memory 23"></div>
+            <div class="mini-photo mp5"><img src="19.jpeg" alt="Beauty memory 24"></div>
+          </div>
+
+          <div class="beauty-bottom-caption">a little collection of beautiful moments ♡</div>
+        </main></main>
+</div>
+
 <audio id="bday-music" src="yehfitoormera.mp3" preload="auto" loop></audio>
 
 <script>
@@ -1482,8 +2095,47 @@ specialPage.addEventListener('click', (e) => {
   if(e.target === specialPage) closeSpecialPage();
 });
 document.addEventListener('keydown', (e) => {
+    if(e.key === 'Escape' && beautyPage.classList.contains('open')){
+      closeBeautyPage();
+      return;
+    }
+
   if(e.key === 'Escape' && specialPage.classList.contains('open')) closeSpecialPage();
 });
+
+  // ===== THE BEAUTY: OPEN AS A SEPARATE FULL-SCREEN PAGE =====
+  const beautyBtn = document.getElementById('beauty-btn');
+  const beautyPage = document.getElementById('beauty-page');
+  const beautyClose = document.getElementById('beauty-page-close');
+
+  function openBeautyPage(){
+    if(typeof spawnBtnBurst === 'function') spawnBtnBurst(beautyBtn);
+    setTimeout(() => {
+      beautyPage.classList.add('open');
+      document.body.classList.add('locked');
+      beautyPage.scrollTop = 0;
+      setTimeout(() => beautyClose.focus(), 500);
+    }, reduceMotion ? 0 : 120);
+  }
+
+  function closeBeautyPage(){
+    beautyPage.classList.remove('open');
+    setTimeout(() => {
+      if(specialPage.classList.contains('open')) {
+        document.body.classList.add('locked');
+      } else {
+        document.body.classList.remove('locked');
+      }
+      beautyBtn.focus();
+    }, 550);
+  }
+
+  beautyBtn.addEventListener('click', openBeautyPage);
+  beautyClose.addEventListener('click', closeBeautyPage);
+  beautyPage.addEventListener('click', (e) => {
+    if(e.target === beautyPage) closeBeautyPage();
+  });
+
 </script>
 
 </body>
