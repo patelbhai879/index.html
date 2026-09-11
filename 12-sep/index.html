@@ -1915,6 +1915,7 @@ html,body{
 </div>
 
 <audio id="bday-music" src="yehfitoormera.mp3" preload="auto" loop></audio>
+<audio id="last-music" src="laedooba.mp3" preload="auto" loop></audio>
 
 <script>
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -2216,6 +2217,17 @@ document.addEventListener('keydown', (e) => {
 
   function openLastThingPage(){
     if(typeof spawnBtnBurst === 'function') spawnBtnBurst(lastThingBtn);
+    
+    // Stop the first song
+    stopMusic();
+    
+    // Play laedooba
+    const lastMusic = document.getElementById('last-music');
+    if (lastMusic) {
+      lastMusic.currentTime = 0;
+      lastMusic.play().catch(e => console.log('Audio play blocked:', e));
+    }
+    
     setTimeout(() => {
       lastThingPage.classList.add('open');
       document.body.classList.add('locked');
@@ -2226,6 +2238,13 @@ document.addEventListener('keydown', (e) => {
 
   function closeLastThingPage(){
     lastThingPage.classList.remove('open');
+    
+    // Stop laedooba
+    const lastMusic = document.getElementById('last-music');
+    if (lastMusic) {
+      lastMusic.pause();
+    }
+    
     setTimeout(() => {
       if(beautyPage.classList.contains('open')) {
         document.body.classList.add('locked');
