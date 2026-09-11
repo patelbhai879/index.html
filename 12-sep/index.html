@@ -56,8 +56,8 @@
     transition:transform 1.15s cubic-bezier(.77,0,.18,1);
     z-index:1;
   }
-  #intro-overlay .curtain.left{ left:0; border-right:1px solid var(--line); }
-  #intro-overlay .curtain.right{ right:0; border-left:1px solid var(--line); }
+  #intro-overlay .curtain.left{ left:0; }
+  #intro-overlay .curtain.right{ right:0; }
   #intro-overlay.opening .curtain.left{ transform:translateX(-102%); }
   #intro-overlay.opening .curtain.right{ transform:translateX(102%); }
 
@@ -1803,25 +1803,7 @@ html,body{
     ripple.className = 'seal-ripple';
     sealContent.appendChild(ripple);
 
-    // 3. Create the Bursting Hearts (if reduced motion is off)
-    if (!reduceMotion) {
-      const particleCount = 10;
-      for (let i = 0; i < particleCount; i++) {
-        const particle = document.createElement('div');
-        particle.className = 'burst-particle';
-        particle.innerHTML = ['❤️', '💖', '✨'][Math.floor(Math.random() * 3)];
-        
-        // Calculate spread
-        const angle = (Math.PI * 2 * i) / particleCount; 
-        const distance = 90 + Math.random() * 60; 
-        
-        particle.style.setProperty('--tx', Math.cos(angle) * distance + 'px');
-        particle.style.setProperty('--ty', Math.sin(angle) * distance + 'px');
-        
-        sealContent.appendChild(particle);
-        setTimeout(() => particle.remove(), 800);
-      }
-    }
+    // 3. Create the Bursting Hearts effect (Removed)
 
     setTimeout(() => flash.remove(), 500);
     setTimeout(() => ripple.remove(), 600);
@@ -1847,58 +1829,9 @@ html,body{
     if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); openIntro(); }
   });
 
-  // Ambient floating love hearts for the locked intro screen
-  if (!reduceMotion) {
-    const dustInterval = setInterval(() => {
-      if(overlay.classList.contains('opening') || overlay.classList.contains('exploding')) {
-        clearInterval(dustInterval);
-        return;
-      }
-      
-      const dust = document.createElement('div');
-      dust.className = 'intro-dust';
-      dust.innerHTML = ['❤️', '✨', '💖', '💕'][Math.floor(Math.random() * 4)];
-      dust.style.fontSize = (0.6 + Math.random() * 0.8) + 'rem';
-      
-      dust.style.left = (Math.random() * 90 + 5) + '%'; 
-      dust.style.top = (60 + Math.random() * 40) + '%'; 
-      
-      const duration = 3 + Math.random() * 4; 
-      dust.style.animationDuration = duration + 's';
-      
-      overlay.appendChild(dust);
-      
-      setTimeout(() => dust.remove(), duration * 1000);
-    }, 400); // Spawns a new floating heart every 400ms
-  }
+  // Ambient floating love hearts for the locked intro screen (Removed)
 
-  // Rising Love Hearts Background (runs continuously behind everything)
-  const field = document.getElementById('ember-field');
-
-  function spawnLoveHeart(){
-    const el = document.createElement('div');
-    el.className = 'ember';
-    el.innerHTML = ['❤️', '🤍', '✨', '💕'][Math.floor(Math.random() * 4)];
-    el.style.fontSize = (0.8 + Math.random() * 1.2) + 'rem';
-    el.style.left = Math.random() * 100 + '%';
-    
-    // Randomize drift and rotation
-    el.style.setProperty('--drift', (Math.random() * 120 - 60) + 'px');
-    el.style.setProperty('--rot', (Math.random() * 360) + 'deg');
-    
-    const duration = Math.random() * 10 + 12; // Very slow and gentle
-    el.style.animationDuration = duration + 's';
-    
-    field.appendChild(el);
-    setTimeout(() => el.remove(), duration * 1000);
-  }
-
-  if(!reduceMotion){
-    // Spawn some initial hearts instantly so the background isn't empty
-    for(let i = 0; i < 15; i++) setTimeout(spawnLoveHeart, i * 500);
-    // Keep spawning them forever
-    setInterval(spawnLoveHeart, 1000);
-  }
+  // Rising Love Hearts Background (Removed)
 
   // Scroll reveal logic
   const io = new IntersectionObserver((entries) => {
@@ -1906,36 +1839,7 @@ html,body{
   }, { threshold: 0.15 });
   document.querySelectorAll('.section-head, .t-item, .reveal').forEach(el => io.observe(el));
 
-  // Extra floating hearts inside the final Birthday section
-  const heartsField = document.getElementById('floating-hearts');
-  let heartInterval = null;
-
-  function spawnFinalHeart(){
-    const el = document.createElement('span');
-    el.textContent = ['❤','💛','✨'][Math.floor(Math.random() * 3)];
-    el.style.left = Math.random() * 100 + '%';
-    el.style.fontSize = (Math.random() * 0.8 + 0.9) + 'rem';
-    el.style.setProperty('--hx', (Math.random() * 80 - 40) + 'px');
-    const duration = Math.random() * 5 + 7;
-    el.style.animationDuration = duration + 's';
-    heartsField.appendChild(el);
-    setTimeout(() => el.remove(), duration * 1000);
-  }
-
-  if(!reduceMotion && heartsField){
-    const closerObserver = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if(entry.isIntersecting && !heartInterval){
-          spawnFinalHeart();
-          heartInterval = setInterval(spawnFinalHeart, 800);
-        } else if(!entry.isIntersecting && heartInterval){
-          clearInterval(heartInterval);
-          heartInterval = null;
-        }
-      });
-    }, { threshold: 0.2 });
-    closerObserver.observe(document.querySelector('.closer'));
-  }
+  // Extra floating hearts inside the final Birthday section (Removed)
 
   // ---------- Gallery placeholder handling ----------
   const SLOT_PLACEHOLDER = 'data:image/svg+xml;utf8,' + encodeURIComponent(
@@ -1960,15 +1864,7 @@ html,body{
   let confettiInterval = null;
 
   function spawnConfetti(){
-    const el = document.createElement('span');
-    el.textContent = ['🎉','🎈','✨','💛','❤️'][Math.floor(Math.random() * 5)];
-    el.style.left = Math.random() * 100 + '%';
-    el.style.fontSize = (Math.random() * 0.7 + 0.8) + 'rem';
-    el.style.setProperty('--rot', (Math.random() * 360) + 'deg');
-    const duration = Math.random() * 2 + 2.5;
-    el.style.animationDuration = duration + 's';
-    confettiField.appendChild(el);
-    setTimeout(() => el.remove(), duration * 1000);
+    // Removed confetti effect
   }
 
  function spawnBtnBurst(originEl){
@@ -1984,26 +1880,7 @@ html,body{
   document.body.appendChild(ring);
   setTimeout(() => ring.remove(), 600);
 
-  if (reduceMotion) return;
-
-  // bursting particles
-  const emojis = ['🎉','💖','✨','🎂','❤️'];
-  const count = 12;
-  for (let i = 0; i < count; i++){
-    const p = document.createElement('div');
-    p.className = 'btn-burst-particle';
-    p.textContent = emojis[Math.floor(Math.random() * emojis.length)];
-    p.style.left = cx + 'px';
-    p.style.top = cy + 'px';
-
-    const angle = (Math.PI * 2 * i) / count + (Math.random() * 0.4 - 0.2);
-    const distance = 70 + Math.random() * 90;
-    p.style.setProperty('--tx', Math.cos(angle) * distance + 'px');
-    p.style.setProperty('--ty', Math.sin(angle) * distance + 'px');
-
-    document.body.appendChild(p);
-    setTimeout(() => p.remove(), 900);
-  }
+  // bursting particles (Removed)
 }
 
 const music = document.getElementById('bday-music');
