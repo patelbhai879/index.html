@@ -627,22 +627,42 @@
   }
   .polaroid:not(.polaroid--hero){
     --radius:calc(var(--ring) / 2 - 64px);
+    --spin: var(--spin-angle, 0deg);
     transform:
       translate(-50%,-50%)
-      rotate(var(--angle, 0deg))
+      rotate(calc(var(--angle, 0deg) + var(--spin)))
       translateY(calc(-1 * var(--radius)))
-      rotate(calc(-1 * var(--angle, 0deg)))
+      rotate(calc(-1 * (var(--angle, 0deg) + var(--spin))))
       rotate(var(--rot, 0deg));
   }
   .polaroid:not(.polaroid--hero):hover{
+    --spin: var(--spin-angle, 0deg);
     transform:
       translate(-50%,-50%)
-      rotate(var(--angle, 0deg))
+      rotate(calc(var(--angle, 0deg) + var(--spin)))
       translateY(calc(-1 * var(--radius)))
-      rotate(calc(-1 * var(--angle, 0deg)))
+      rotate(calc(-1 * (var(--angle, 0deg) + var(--spin))))
       rotate(0deg) scale(1.14);
     box-shadow:0 22px 40px -14px rgba(201,24,74,0.55);
     z-index:30;
+  }
+  
+  /* --- SLIDESHOW ANIMATION --- */
+  .polaroid-wall.in-slideshow .polaroid {
+    opacity: 0.15;
+    pointer-events: none;
+    transition: all 0.6s cubic-bezier(0.25, 1, 0.5, 1) !important;
+  }
+  .polaroid-wall.in-slideshow .polaroid.slideshow-focus {
+    opacity: 1;
+    z-index: 9999;
+    transform: translate(-50%, -50%) scale(1.8) rotate(0deg) !important;
+    box-shadow: 0 40px 80px -20px rgba(0,0,0,0.9) !important;
+  }
+  @media(max-width:700px) {
+    .polaroid-wall.in-slideshow .polaroid.slideshow-focus {
+      transform: translate(-50%, -50%) scale(2.2) rotate(0deg) !important;
+    }
   }
   .polaroid .frame{
     position:relative;
@@ -1557,6 +1577,108 @@ html,body{
   #beauty-page .beauty-mini-photos{left:20vw!important;top:550px!important;bottom:auto!important}
 }
 
+/* ===== LAST THING BUTTON & PAGE ===== */
+.last-thing-btn {
+  position: absolute;
+  z-index: 5;
+  right: 140px;
+  top: 155px;
+  background: transparent;
+  color: #fff;
+  border: 1px solid rgba(255,255,255,0.7);
+  border-radius: 6px;
+  padding: 5px 12px;
+  font-family: 'Caveat', cursive;
+  font-size: 1.4rem;
+  cursor: pointer;
+  transform: rotate(-3deg);
+  transition: all 0.2s;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+.last-thing-btn:hover {
+  transform: rotate(0deg) scale(1.05);
+  background: rgba(255, 255, 255, 0.15);
+  box-shadow: 0 6px 14px rgba(0,0,0,0.3);
+}
+@media(max-width:700px){
+  .last-thing-btn {
+    right: 20px;
+    top: 140px;
+    font-size: 1.2rem;
+    padding: 4px 10px;
+  }
+}
+
+#last-thing-page {
+  position: fixed;
+  inset: 0;
+  z-index: 10060;
+  background: linear-gradient(135deg, #160a17, #24101f 55%, #100913);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5vw;
+  opacity: 0;
+  visibility: hidden;
+  transform: scale(1.05);
+  transition: opacity 0.5s ease, transform 0.5s ease, visibility 0s linear 0.5s;
+  overflow-y: auto;
+}
+#last-thing-page.open {
+  opacity: 1;
+  visibility: visible;
+  transform: scale(1);
+  transition: opacity 0.5s ease, transform 0.5s ease, visibility 0s linear 0s;
+}
+.last-thing-content {
+  position: relative;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 185, 215, 0.2);
+  border-radius: 12px;
+  padding: 2.5rem;
+  max-width: 800px;
+  text-align: center;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+}
+.last-thing-close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #fff;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.last-thing-close:hover {
+  background: rgba(201, 24, 74, 0.4);
+  transform: rotate(90deg);
+}
+.last-thing-title {
+  font-family: 'Caveat', cursive;
+  color: #d9a566;
+  font-size: 2rem;
+  margin: 0 0 1rem 0;
+}
+.last-thing-text {
+  font-family: 'Lora', serif;
+  font-size: 1.1rem;
+  line-height: 1.8;
+  color: #fdf5f8;
+  white-space: pre-wrap;
+  margin-top: 1rem;
+}
+@media(max-width:700px){
+  .last-thing-content { padding: 1.8rem 1.2rem; }
+  .last-thing-text { font-size: 1rem; }
+}
 </style>
 </head>
 <body class="locked">
@@ -1741,7 +1863,10 @@ html,body{
     
 </div>
 
-      <button type="button" id="beauty-btn" class="beauty-btn">✨ The Beauty ✨</button>
+      <div class="action-buttons" style="display:flex; flex-wrap:wrap; justify-content:center; gap:1.2rem; margin-top:1.5rem; position:relative; z-index:20;">
+        <button type="button" id="beauty-btn" class="beauty-btn" style="margin:0;">✨ The Beauty ✨</button>
+        <button type="button" id="magic-btn" class="beauty-btn" style="margin:0;">✨ Click Here ✨</button>
+      </div>
   </div>
 </div>
 
@@ -1752,19 +1877,20 @@ html,body{
   <main class="beauty-page-content beauty-girl-layout">
           <div class="beauty-paper-texture"></div>
 
-          <div class="beauty-top-camera">📸</div>
+
           <div class="beauty-happy">Happy</div>
           <h2 class="beauty-big-title">Birthday</h2>
           <div class="beauty-name">Jiya</div>
+          <button type="button" id="last-thing-btn" class="last-thing-btn">the last thing</button>
 
           <div class="beauty-left-photos">
-            <div class="girl-polaroid gp1"><img src="24.jpeg" alt="Beauty memory 16"><span>♥</span></div>
+            <div class="girl-polaroid gp1"><img src="16.jpeg" alt="Beauty memory 16"><span>♥</span></div>
             <div class="girl-polaroid gp2"><img src="17.jpeg" alt="Beauty memory 17"><span>♥</span></div>
             <div class="girl-polaroid gp3"><img src="18.jpg" alt="Beauty memory 18"><span>♥</span></div>
           </div>
 
           <div class="beauty-big-photo">
-            <img src="16.jpeg" alt="Beauty main memory">
+            <img src="24.jpeg" alt="Beauty main memory">
           </div>
 
           <div class="beauty-mini-photos">
@@ -1775,8 +1901,17 @@ html,body{
             <div class="mini-photo mp5"><img src="19.jpeg" alt="Beauty memory 24"></div>
           </div>
 
-          <div class="beauty-bottom-caption">a little collection of beautiful moments ♡</div>
+          
         </main>
+</div>
+
+<!-- THE LAST THING PAGE -->
+<div id="last-thing-page" role="dialog" aria-modal="true" aria-label="The Last Thing">
+  <div class="last-thing-content">
+    <button type="button" class="last-thing-close" id="last-thing-close" aria-label="Close">✕</button>
+    <h3 class="last-thing-title">(Plzzz akhu vanch jeee )</h3>
+    <div class="last-thing-text">Hi jiyaaa huu tanee sacho prem karu chu bachhaaaaa. dikuuuuuu tane khabr che ne hu nai rai saku tara vagar to pachi kem bachhhaaa. chall bacahhaaaa hu badhiii j vastuu matr sorryy kau chu mariii jiyuuuuuuu mara par vishwash rakh betuuuuu ave avu nai thay dikuuuuuuu tuuu j dikuuuuu vichar em ke vednat ne khali last var java dauuuu chikuuuuuu tuu vat to kar bachhhaaaaaa badhu j apaa banne vache clear thase dikuuuuuuuuu naa apde cheat karyu apde koi pan divas ek bija ni disrespect nathi kari apde koi divas ek bija ne khota words nai bolya to pachi bachhaa and apde to ketlu saraaa reta hata bachhaaaa anee babyyyyyyyy apda banne vache kai atlu badhu serious pan natuu bachhhaaaaa to pachiiii kem dikuuuuuuu chal ne avee jiyuuuu babyyyyyyyyy aveee thi taro veduuuuu avu nai kare bachhaaaa 🥹 betaaaaa hu tane aa badhu j prem thi kai rayoo chu bachhaaa aa je website ni ander je pan kai che ne ae me maraa prem th banai che bachhhaaaa khali khali tane manava mate nathi banavi dikuuuuu chal nee dikaaaaaa aveee java deee nee badhuuuuu anee vat karva avi jaa ne bachaaaa. I Love You so so muchhhhh mariiiiii godiiiiiiiiiiiiiiiiiiiiiiiiiiii 😭😭🥹🥹🥹 avii jaaa nee babuuuuuuuuu mara par vishwashhh kar bachhhaaaaaa mara thi se j pan nathi revatu bachhhaaaa avi jaa ne babuuuuuu mee aa badhi j vastu banava mate akhi akhi raat nikadi che betaaaa tara mateeeeee ane em na samajati mee aa khali j banayu che special tara nate aa vastu kari cheee jeee aaj sudhi koi pan nai kari sake bachhaaaaaa chall betaaaa avii jaaa ne ave badhi j misunderstanding clear karvaaa bachhaaaa</div>
+  </div>
 </div>
 
 <audio id="bday-music" src="yehfitoormera.mp3" preload="auto" loop></audio>
@@ -2017,7 +2152,110 @@ document.addEventListener('keydown', (e) => {
     if(e.target === beautyPage) closeBeautyPage();
   });
 
-</script>
+  // ===== MAGIC SLIDESHOW LOGIC =====
+  const magicBtn = document.getElementById('magic-btn');
+  const polaroidWall = document.querySelector('.polaroid-wall');
+  const allPolaroids = Array.from(polaroidWall.querySelectorAll('.polaroid'));
 
+  function startMagic() {
+    if (magicBtn.disabled) return;
+    magicBtn.disabled = true; // Prevent double clicks
+    magicBtn.textContent = '✨ Magic Happening... ✨';
+    
+    // Ensure special page is open and scroll to polaroid wall
+    polaroidWall.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    
+    const duration = 12000;
+    const start = performance.now();
+    
+    function animateSpin(time) {
+      const elapsed = time - start;
+      if (elapsed < duration) {
+        // ease in out cubic
+        const t = elapsed / duration;
+        const ease = t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+        const angle = ease * 720; // 2 full rotations
+        polaroidWall.style.setProperty('--spin-angle', angle + 'deg');
+        requestAnimationFrame(animateSpin);
+      } else {
+        polaroidWall.style.setProperty('--spin-angle', '720deg');
+        startSlideshow();
+      }
+    }
+    requestAnimationFrame(animateSpin);
+  }
+  
+  function startSlideshow() {
+    polaroidWall.classList.add('in-slideshow');
+    let currentIndex = 0;
+    
+    function showNext() {
+      allPolaroids.forEach(p => p.classList.remove('slideshow-focus'));
+      
+      if (currentIndex < allPolaroids.length) {
+        allPolaroids[currentIndex].classList.add('slideshow-focus');
+        currentIndex++;
+        setTimeout(showNext, 1000); // 1 picture time 1 sec
+      } else {
+        // Revert to normal
+        polaroidWall.classList.remove('in-slideshow');
+        polaroidWall.style.removeProperty('--spin-angle');
+        magicBtn.textContent = '✨ Click Here ✨';
+        magicBtn.disabled = false;
+      }
+    }
+    showNext();
+  }
+  
+  magicBtn.addEventListener('click', startMagic);
+
+  // ===== THE LAST THING PAGE LOGIC =====
+  const lastThingBtn = document.getElementById('last-thing-btn');
+  const lastThingPage = document.getElementById('last-thing-page');
+  const lastThingClose = document.getElementById('last-thing-close');
+
+  function openLastThingPage(){
+    if(typeof spawnBtnBurst === 'function') spawnBtnBurst(lastThingBtn);
+    setTimeout(() => {
+      lastThingPage.classList.add('open');
+      document.body.classList.add('locked');
+      lastThingPage.scrollTop = 0;
+      setTimeout(() => lastThingClose.focus(), 500);
+    }, reduceMotion ? 0 : 120);
+  }
+
+  function closeLastThingPage(){
+    lastThingPage.classList.remove('open');
+    setTimeout(() => {
+      if(beautyPage.classList.contains('open')) {
+        document.body.classList.add('locked');
+      } else if (specialPage.classList.contains('open')) {
+        document.body.classList.add('locked');
+      } else {
+        document.body.classList.remove('locked');
+      }
+      lastThingBtn.focus();
+    }, 550);
+  }
+
+  if (lastThingBtn) {
+    lastThingBtn.addEventListener('click', openLastThingPage);
+  }
+  if (lastThingClose) {
+    lastThingClose.addEventListener('click', closeLastThingPage);
+  }
+  if (lastThingPage) {
+    lastThingPage.addEventListener('click', (e) => {
+      if(e.target === lastThingPage) closeLastThingPage();
+    });
+  }
+
+  document.addEventListener('keydown', (e) => {
+    if(e.key === 'Escape' && lastThingPage && lastThingPage.classList.contains('open')){
+      closeLastThingPage();
+    }
+  });
+
+</script>
 </body>
 </html>
